@@ -15,7 +15,7 @@ function applyBadges(results: AggregatedResult[]): AggregatedResult[] {
   // "Melhor promoção" = maior desconto relativo (tem promoção E menor preço vs outros do mesmo restaurante)
   const withPromo = results.filter((r) => r.hasPromotion)
   const bestPromoId = withPromo.length > 0
-    ? withPromo.reduce((best, r) => r.minPrice < best.minPrice ? r : best, withPromo[0]).id
+    ? withPromo.reduce((best, r) => r.minPrice < best.minPrice ? r : best, withPromo[0]!).id
     : null
 
   return results.map((r) => ({
@@ -79,6 +79,7 @@ export const searchService = {
     const aggregated: AggregatedResult[] = providerResults.flatMap((result, index) => {
       if (result.status === 'rejected') return []
       const provider = providers[index]
+      if (!provider) return []
       return result.value.map((item) => ({
         id: `${provider.slug}::${item.externalId}`,
         externalId: item.externalId,

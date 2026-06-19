@@ -131,7 +131,7 @@ export default function RestaurantePage({
       <div className="grid grid-cols-4 gap-2 rounded-xl border border-border bg-card p-4">
         {[
           { label: 'Avaliação', value: `${restaurant.rating.toFixed(1)} ★`, sub: `${restaurant.reviewCount.toLocaleString('pt-BR')} avaliações` },
-          { label: 'Distância', value: `${restaurant.distance.toFixed(1)} km`, sub: restaurant.address.split('-')[0].trim() },
+          { label: 'Distância', value: `${restaurant.distance.toFixed(1)} km`, sub: (restaurant.address.split('-')[0] ?? '').trim() },
           { label: 'Entrega', value: `${restaurant.minDeliveryTime}–${restaurant.maxDeliveryTime} min`, sub: restaurant.deliveryFee === 0 ? 'Frete grátis' : formatCurrency(restaurant.deliveryFee) },
           { label: 'A partir de', value: formatCurrency(restaurant.minPrice), sub: restaurant.hasPromotion ? restaurant.promotionLabel ?? 'Promoção' : 'Sem promoção' },
         ].map(({ label, value, sub }) => (

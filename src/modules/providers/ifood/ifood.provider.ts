@@ -172,7 +172,7 @@ export class IfoodProvider implements IDeliveryProvider {
 
     return ids.map((id) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { address, isOpen, menu, ...result } = RESTAURANT_DB[id]
+      const { address, isOpen, menu, ...result } = RESTAURANT_DB[id] as ProviderRestaurantDetail
       return result
     })
   }
