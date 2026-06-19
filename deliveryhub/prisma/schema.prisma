@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+// USER (consumidor final — sem empresa, sem cargo)
+// ─────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  refreshTokens RefreshToken[]
+  favorites     Favorite[]
+  searchHistory SearchHistory[]
+
+  @@index([email])
+  @@map("users")
+}
+
+// ─────────────────────────────────────────────
+// REFRESH TOKEN
+// ─────────────────────────────────────────────
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  userId    String
+  token     String    @unique
+  expiresAt DateTime
+  createdAt DateTime  @default(now())
+  revokedAt DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+// ─────────────────────────────────────────────
+// FAVORITE (restaurante favoritado por um usuário)
+// ─────────────────────────────────────────────
+
+model Favorite {
+  id              String   @id @default(cuid())
+  userId          String
+  providerSlug    String   // "ifood" | "99food"
+  restaurantExtId String   // ID do restaurante no provider
+  restaurantName  String
+  restaurantImage String?
+  category        String?
+  createdAt       DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, providerSlug, restaurantExtId])
+  @@index([userId])
+  @@map("favorites")
+}
+
+// ─────────────────────────────────────────────
+// SEARCH HISTORY
+// ─────────────────────────────────────────────
+
+model SearchHistory {
+  id        String   @id @default(cuid())
+  userId    String?
+  query     String
+  results   Int      @default(0)
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("search_history")
+}

@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem \"c:\\\\i99\" -ErrorAction SilentlyContinue; if \\(-not \\(Test-Path \"c:\\\\i99\"\\)\\) { Write-Host \"Directory does not exist, creating...\" })",
+      "PowerShell(node --version)",
+      "PowerShell(npm --version)",
+      "PowerShell(docker --version)",
+      "PowerShell(Copy-Item \"c:\\\\i99\\\\deliveryhub\\\\.env.example\" \"c:\\\\i99\\\\deliveryhub\\\\.env\")",
+      "PowerShell(Get-Process \"Docker Desktop\" -ErrorAction SilentlyContinue)",
+      "PowerShell(Start-Process \"C:\\\\Program Files\\\\Docker\\\\Docker\\\\Docker Desktop.exe\" -ErrorAction SilentlyContinue)",
+      "PowerShell($timeout = 90; $elapsed = 0; while \\($elapsed -lt $timeout\\) { Start-Sleep -Seconds 5; $elapsed += 5; $result = docker info 2>&1; if \\($LASTEXITCODE -eq 0\\) { Write-Host \"Docker pronto! \\($elapsed s\\)\"; break } else { Write-Host \"Aguardando Docker... \\($elapsed s\\)\" } }; if \\($elapsed -ge $timeout\\) { Write-Host \"Timeout - Docker nao iniciou\" })",
+      "PowerShell(Set-Location \"c:\\\\i99\\\\deliveryhub\"; $env:DATABASE_URL = \"postgresql://postgres:postgres@localhost:5432/deliveryhub?schema=public\"; npx prisma migrate dev --name init 2>&1)",
+      "PowerShell(Stop-Process -Name \"node\" -Force -ErrorAction SilentlyContinue)",
+      "Skill(run)",
+      "Skill(run:*)",
+      "Bash(npx prisma *)",
+      "Bash(PRISMA_USER_CONSENT_FOR_DANGEROUS_AI_ACTION=\"sim\" npx prisma migrate reset --force)",
+      "Bash(npm run *)",
+      "Bash(docker exec *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "Bash(curl -s -o /dev/null -w \"home: %{http_code}\\\\n\" http://localhost:3000/home)",
+      "Bash(curl -s -o /dev/null -w \"search: %{http_code}\\\\n\" \"http://localhost:3000/api/search?q=hamburguer\")",
+      "Bash(curl -s -o /dev/null -w \"favoritos sem auth: %{http_code}\\\\n\" http://localhost:3000/favoritos)",
+      "Bash(tail -50 /tmp/nextjs.log 2>&1)",
+      "Read(//tmp/**)",
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(curl -s -w \"search: %{http_code} | body: %{size_download}b\\\\n\" -o /dev/null \"http://localhost:3000/api/search?q=hamburguer\")",
+      "Bash(curl -s http://localhost:3000/home)",
+      "PowerShell(Get-Process node -ErrorAction SilentlyContinue)",
+      "PowerShell(taskkill /F /IM node.exe 2>$null)",
+      "PowerShell(Start-Sleep -Seconds 3; $r = Invoke-WebRequest -Uri \"http://localhost:3000/home\" -UseBasicParsing -TimeoutSec 15; Write-Host \"Status: $\\($r.StatusCode\\)\"; Write-Host \"Length: $\\($r.Content.Length\\)\"; $r.Content.Substring\\(0, 500\\))",
+      "PowerShell($search = Invoke-WebRequest -Uri \"http://localhost:3000/api/search?q=hamburguer\" -UseBasicParsing -TimeoutSec 10; Write-Host \"Search: $\\($search.StatusCode\\) \\($\\($search.Content.Length\\) bytes\\)\"; $fav = Invoke-WebRequest -Uri \"http://localhost:3000/favoritos\" -UseBasicParsing -MaximumRedirection 0 -TimeoutSec 10 -ErrorAction SilentlyContinue; Write-Host \"Favoritos \\(no auth\\): $\\($fav.StatusCode\\)\")",
+      "PowerShell(New-Item -ItemType Directory -Force \"C:\\\\i99\\\\deliveryhub\\\\prisma\\\\migrations\\\\20260619000000_init\")"
+    ]
+  }
+}
